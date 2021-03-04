@@ -10,7 +10,6 @@ int get_negative_int(void);
   printf("%i\n", i);
  }
 
-
  int get_negative_int(void)
  {
 		int n;
