@@ -2,4 +2,4 @@
 !*.c
 !.gitignore
 !/Basics
-!.vscode
+!/.vscode
