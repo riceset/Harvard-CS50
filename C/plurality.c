@@ -80,18 +80,22 @@ bool vote(string name)
 void print_winner(void)
 {
     int biggestNum = candidates[0].votes;
-    string bigName = candidates[0].name;
-    string bigName2 = candidates[0].name;
 
     for (int i = 1; i < candidate_count; i++)
     {
         if (biggestNum < candidates[i].votes)
         {
             biggestNum = candidates[i].votes;
-            bigName = candidates[i].name;
         }
     }
 
-    printf("%s\n", bigName);
+    for (int j = 0; j < candidate_count; j++)
+    {
+        if (candidates[j].votes == biggestNum)
+        {
+            printf("%s\n", candidates[j].name);
+        }
+    }
+
     return;
 }
