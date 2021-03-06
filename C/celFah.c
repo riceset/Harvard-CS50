@@ -4,8 +4,8 @@ int main()
 {
 	float enteredNumber;
 	int FahOrCel;
-	printf("Please enter 0 for converting Fahrenheit to Celsius.\nPlease enter 1 for converting Celsius to Fahrenheit.\n");
-	printf(" \n");
+	printf("Please enter 0 for converting Fahrenheit to Celsius.\n");
+	printf("Please enter 1 for converting Celsius to Fahrenheit.\n");
 	printf("⚡️ Enter 0 or 1: ");
 	scanf("%i", &FahOrCel);
 
