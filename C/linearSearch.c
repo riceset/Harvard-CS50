@@ -1,27 +1,22 @@
 #include <stdio.h>
-#include <cs50.h>
 
 int main(void)
 {
-	int n[] = {1, 2, 3, 4, 5, 6, 7, 8};
-	bool present = false;
-	
-	int target = get_int("Enter your target: ");
+	const int SIZE = 9;
+	int ages[SIZE] = {4, 6, 67, 40, 30, 20, 24, 90, 100};
+	int target;
 
-	for (int i = 0; i < (sizeof(n) - 1); i++)
+	printf("What's the number you're looking for? ");
+	scanf("%i", &target);
+
+	for (int i = 0; i < SIZE; i++)
 	{
-		if (i == target)
+		if (target == ages[i])
 		{
-			present = true;
+			printf("%i was found.\n", target);
+			return 0;
 		}
 	}
-	
-	if (present)
-	{
-			printf("True!\n");
-	}
-	else
-	{
-		printf("False!\n");
-	}
+	printf("The number wasn't found.\n");
+	return 1;
 }
