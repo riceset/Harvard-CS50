@@ -1,4 +1,6 @@
 *
 !*.c
-!*.json
 !/Programs
+!/Basics
+!*.json
+!/.vscode
