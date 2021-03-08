@@ -1,4 +1,5 @@
 *
 !*.c
+!*.json
 !/Programs
 !/.vscode
