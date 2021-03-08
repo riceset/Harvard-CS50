@@ -1,15 +1,13 @@
 # C
 
-## Directories
-
-### Basics
+## Basics
 
 Sample codes of basic concepts of the C programming language. 
 
-### Programs
+## Programs
 
 Some useful programs written in C.
 
-### .vscode
+## .vscode
 
 Debug settings.
