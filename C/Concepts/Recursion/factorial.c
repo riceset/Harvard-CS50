@@ -20,6 +20,7 @@ int factorial(int num)
     else
         return num *= factorial(num - 1);
 }
+
 //Explanation:
 //num is 2
 //2 *
