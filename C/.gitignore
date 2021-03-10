@@ -1,8 +1,6 @@
 *
 !*.c
-!/Concepts
 !/Exercises
 !/Simple
-!*.json
-!/.vscode
 !README.md
+!/Concepts/*
