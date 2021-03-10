@@ -1,6 +1,10 @@
 # This is CS50
 These are notes and sample codes I am writing while taking CS50.
 
+### Week 0 - Scratch
+### Week 1 - C
+### Week 2 - Arrays
+### Week 3 - Algorithms
 ## External Links:
 <a href="https://github.com/riceset/"><img align='right' src='https://user-images.githubusercontent.com/48802655/110702256-0f504980-81d1-11eb-9367-a4fe0c93a9f5.png' width='60'></a>
 
