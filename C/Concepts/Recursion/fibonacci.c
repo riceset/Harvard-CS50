@@ -1,21 +1,21 @@
 #include <stdio.h>
 
-int fib(int n);
+int fib(int position);
 
 int main(void)
 {
-    int num;
+    int input;
     printf("Number: ");
-    scanf("%i", &num);
+    scanf("%i", &input);
 
-    int result = fib(num);
-    printf("result: %i\n", result);
+    int result = fib(input);
+    printf("Result: %i\n", result);
 }
 
-int fib(int n)
+int fib(int position)
 {
-    if (n == 1 || n == 0)
-        return n;
+    if (position <= 1)
+        return position;
     else
-        return fib(n - 1) + fib(n - 2);
+        return fib(position - 1) + fib(position - 2);
 }
