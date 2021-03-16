@@ -1,12 +1,6 @@
-#include <stdio.h>
 #include <cs50.h>
+#include <stdio.h>
 #include <string.h>
-
-#define MAX_VOTERS 100
-#define MAX_CANDIDATES 9
-
-//the jth preference for voter i
-int preferences[MAX_VOTERS][MAX_CANDIDATES];
 
 typedef struct
 {
@@ -15,14 +9,21 @@ typedef struct
     bool eliminated;
 } candidate;
 
-//candidates array
+// Defines the max number of voters and candidates
+#define MAX_VOTERS 100
+#define MAX_CANDIDATES 9
+
+//The candidate preference "j" for voter i
+int preferences[MAX_VOTERS][MAX_CANDIDATES];
+
+// An array of candidates (can contain up to 9 candidates)
 candidate candidates[MAX_CANDIDATES];
 
 //Number of voters and candidates
 int voter_count;
 int candidate_count;
 
-// Function prototypes
+//Prototypes
 bool vote(int voter, int rank, string name);
 void tabulate(void);
 bool print_winner(void);
@@ -30,25 +31,27 @@ int find_min(void);
 bool is_tie(int min);
 void eliminate(int min);
 
+//We give the candidates on argv
 int main(int argc, string argv[])
 {
-    //Checks if the user entered less candidates than the required:
+    //If the user didn't enter a candidate name
     if (argc < 2)
     {
         printf("Usage: runoff [candidate ...]\n");
         return 1;
     }
 
+    //Assigns candidate_count the number of candidate names entered
     candidate_count = argc - 1;
 
-    //Checks if the user entered more than 9 candidates:
+    //If the user entered more than 9 candidate names
     if (candidate_count > MAX_CANDIDATES)
     {
         printf("Maximum number of candidates is %i\n", MAX_CANDIDATES);
         return 2;
     }
 
-    //Gives initial values to the array of candidates:
+    //Populates the candidates array initializing the name instance
     for (int i = 0; i < candidate_count; i++)
     {
         candidates[i].name = argv[i + 1];
@@ -56,22 +59,26 @@ int main(int argc, string argv[])
         candidates[i].eliminated = false;
     }
 
-    //Asks for the number of voters:
+    //Prompts for the number of voters
     voter_count = get_int("Number of voters: ");
 
-    //Checks if the user entered a number of voters inside the allowed range:
+    //If the user entered a number greater than 100
     if (voter_count > MAX_VOTERS)
     {
         printf("Maximum number of voters is %i\n", MAX_VOTERS);
+        return 3;
     }
 
-    //For each voter:
+    //Vertical list of all the voters
     for (int i = 0; i < voter_count; i++)
     {
-        //For each vote of the i voter:
+        //Horizontal list of all the preferences for voter i
         for (int j = 0; j < candidate_count; j++)
         {
-            //Prompts for a name:
+            //NOTE: + 1 is for displaying Rank 1 instead of Rank 0
+            //when asking for the preference.
+
+            //Query for each rank for candidate i (rank = preference)
             string name = get_string("Rank %i: ", j + 1);
 
             if (!vote(i, j, name))
@@ -80,19 +87,58 @@ int main(int argc, string argv[])
                 return 4;
             }
         }
+        //Prints a new line for visually separating each voter
         printf("\n");
     }
+
+    tabulate();
 }
 
 bool vote(int voter, int rank, string name)
 {
+    //For each candidate (entered on argv)
     for (int i = 0; i < candidate_count; i++)
     {
-        if (strcmp(candidates[voter].name, name) == 0)
+        //compare if this candidate's name is iqual to the voted candidate
+        if (strcmp(name, candidates[i].name) == 0)
         {
-            candidates[voter].votes++;
+            //If so, assign their position from the candidate vector to
+            //the preference of voter i (inside the preferences matrix)
+            preferences[voter][rank] = i;
             return true;
         }
     }
     return false;
 }
+
+void tabulate(void)
+{
+    //Updates the vote count for all non-eliminated candidates
+    for (int i = 0; i < voter_count; i++)
+    {
+        if (!candidates[i].eliminated)
+        {
+            //If the candidate's first prefference is into the candidates array
+            //increase 1 vote
+            if (candidates[preferences[i][0]].name == candidates[i].name)
+            {
+                candidates[i].votes++;
+                printf("%s has %i\n", candidates[i].name, candidates[i].votes);
+            }
+        }
+
+        //If the candidate was already eliminated
+        else
+        {
+            for (int j = 0; j < candidate_count; j++)
+            {
+                if (candidates[preferences[i][j]].name == candidates[i].name)
+                {
+                    candidates[j].votes++;
+                    printf("%s has %i\n", candidates[j].name, candidates[j].votes);
+                }
+            }
+        }
+    }
+}
+
