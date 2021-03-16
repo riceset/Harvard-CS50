@@ -102,7 +102,7 @@ bool vote(int voter, int rank, string name)
         //compare if this candidate's name is iqual to the voted candidate
         if (strcmp(name, candidates[i].name) == 0)
         {
-            //If so, assign their position from the candidate vector to
+            //If so, assign their position from the candidates vector to
             //the preference of voter i (inside the preferences matrix)
             preferences[voter][rank] = i;
             return true;
@@ -141,4 +141,3 @@ void tabulate(void)
         }
     }
 }
-
