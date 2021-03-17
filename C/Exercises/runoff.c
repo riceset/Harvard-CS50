@@ -91,7 +91,47 @@ int main(int argc, string argv[])
         printf("\n");
     }
 
-    tabulate();
+    // Keep holding runoffs until winner exists
+    while (true)
+    {
+        // Calculate votes given remaining candidates
+        tabulate();
+
+        // Check if election has been won
+        bool won = print_winner();
+        if (won)
+        {
+            break;
+        }
+
+        // Eliminate last-place candidates
+        int min = find_min();
+        bool tie = is_tie(min);
+
+        // If tie, everyone wins
+        if (tie)
+        {
+            for (int i = 0; i < candidate_count; i++)
+            {
+                if (!candidates[i].eliminated)
+                {
+                    printf("%s\n", candidates[i].name);
+                }
+            }
+            break;
+        }
+
+        // Eliminate anyone with minimum number of votes
+        eliminate(min);
+
+        // Reset vote counts back to zero
+        for (int i = 0; i < candidate_count; i++)
+        {
+            candidates[i].votes = 0;
+        }
+    }
+
+    return 0;
 }
 
 bool vote(int voter, int rank, string name)
@@ -108,6 +148,7 @@ bool vote(int voter, int rank, string name)
             return true;
         }
     }
+
     return false;
 }
 
@@ -116,28 +157,75 @@ void tabulate(void)
     //Updates the vote count for all non-eliminated candidates
     for (int i = 0; i < voter_count; i++)
     {
-        if (!candidates[i].eliminated)
+        for (int j = 0; j < candidate_count; j++)
         {
-            //If the candidate's first prefference is into the candidates array
-            //increase 1 vote
-            if (candidates[preferences[i][0]].name == candidates[i].name)
+            //preference holds the candidate index so, candidates[preferences[i][j]]
+            //would be, if Alice has index 0 on the candidates array and the voter
+            //voted for Alice, candidates[0] will be Alice, adding 1 vote for her
+            //and then breaking from the loop.
+            if (!candidates[preferences[i][j]].eliminated)
             {
-                candidates[i].votes++;
-                printf("%s has %i\n", candidates[i].name, candidates[i].votes);
-            }
-        }
-
-        //If the candidate was already eliminated
-        else
-        {
-            for (int j = 0; j < candidate_count; j++)
-            {
-                if (candidates[preferences[i][j]].name == candidates[i].name)
-                {
-                    candidates[j].votes++;
-                    printf("%s has %i\n", candidates[j].name, candidates[j].votes);
-                }
+                candidates[preferences[i][j]].votes++;
+                break;
             }
         }
     }
+}
+
+// Print the winner of the election, if there is one
+bool print_winner(void)
+{
+    int majority = voter_count / 2;
+
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes > majority)
+        {
+            printf("%s\n", candidates[i].name);
+            return true;
+        }
+    }
+    return false;
+}
+
+// Return the minimum number of votes any remaining candidate has
+int find_min(void)
+{
+    int min = MAX_VOTERS;
+
+    for (int i = 0; i < candidate_count; i++)
+    {
+
+        if (!candidates[i].eliminated && candidates[i].votes < min)
+        {
+            min = candidates[i].votes;
+        }
+    }
+    return min;
+}
+
+// Return true if the election is tied between all candidates, false otherwise
+bool is_tie(int min)
+{
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (!candidates[i].eliminated && candidates[i].votes != min)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Eliminate the candidate (or candidates) in last place
+void eliminate(int min)
+{
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (!candidates[i].eliminated && candidates[i].votes == min)
+        {
+            candidates[i].eliminated = true;
+        }
+    }
+    return;
 }
